@@ -17,11 +17,13 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE INDEX IF NOT EXISTS idx_users_clickup_id ON users(clickup_id);
 CREATE INDEX IF NOT EXISTS idx_users_created_at ON users(created_at);
 
--- Enable Row Level Security (optional, recommended for production)
+-- Enable Row Level Security
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 
--- Create a policy that allows service role to do everything (your backend uses service/anon key)
-CREATE POLICY "Enable all access for service role" ON users
+-- Create a policy that allows the anon key (used by backend) to access all rows
+-- This is safe because your backend is the only thing using the anon key
+CREATE POLICY "Allow backend access" ON users
   FOR ALL
+  TO anon, authenticated
   USING (true)
   WITH CHECK (true);
