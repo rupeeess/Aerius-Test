@@ -13,9 +13,22 @@ declare module "express-session" {
 
 const CLICKUP_CLIENT_ID = process.env.CLICKUP_CLIENT_ID!;
 const CLICKUP_CLIENT_SECRET = process.env.CLICKUP_CLIENT_SECRET!;
-const REDIRECT_URI = process.env.REPLIT_DEV_DOMAIN
-  ? `https://${process.env.REPLIT_DEV_DOMAIN}/api/auth/callback`
-  : "http://localhost:5000/api/auth/callback";
+
+// Determine the redirect URI based on environment
+let REDIRECT_URI: string;
+if (process.env.REDIRECT_URI) {
+  // Use explicit REDIRECT_URI if set
+  REDIRECT_URI = process.env.REDIRECT_URI;
+} else if (process.env.REPLIT_DEV_DOMAIN) {
+  // Replit environment
+  REDIRECT_URI = `https://${process.env.REPLIT_DEV_DOMAIN}/api/auth/callback`;
+} else if (process.env.RENDER_EXTERNAL_URL) {
+  // Render environment
+  REDIRECT_URI = `${process.env.RENDER_EXTERNAL_URL}/api/auth/callback`;
+} else {
+  // Local development
+  REDIRECT_URI = "http://localhost:5000/api/auth/callback";
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   app.use(
