@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
-  getUserByClickupId(clickupId: string): Promise<User | undefined>;
+  getUserByClickupUserId(clickupUserId: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: string, user: Partial<InsertUser>): Promise<User | undefined>;
 }
@@ -25,11 +25,11 @@ export class SupabaseStorage implements IStorage {
     return data as User;
   }
 
-  async getUserByClickupId(clickupId: string): Promise<User | undefined> {
+  async getUserByClickupUserId(clickupUserId: string): Promise<User | undefined> {
     const { data, error } = await supabase
       .from("users")
       .select("*")
-      .eq("clickup_id", clickupId)
+      .eq("clickup_user_id", clickupUserId)
       .single();
 
     if (error || !data) return undefined;
@@ -40,11 +40,17 @@ export class SupabaseStorage implements IStorage {
     const { data, error } = await supabase
       .from("users")
       .insert({
-        clickup_id: insertUser.clickupId,
+        clickup_user_id: insertUser.clickupUserId,
         username: insertUser.username,
         email: insertUser.email,
         profile_picture: insertUser.profilePicture,
         access_token: insertUser.accessToken,
+        token_type: insertUser.tokenType || "Bearer",
+        expires_at: insertUser.expiresAt,
+        scopes_granted: insertUser.scopesGranted,
+        team_id: insertUser.teamId,
+        team_name: insertUser.teamName,
+        authorized_workspaces: insertUser.authorizedWorkspaces || [],
         user_data: insertUser.userData,
       })
       .select()
@@ -56,14 +62,21 @@ export class SupabaseStorage implements IStorage {
 
   async updateUser(id: string, user: Partial<InsertUser>): Promise<User | undefined> {
     const updateData: any = {};
-    if (user.clickupId) updateData.clickup_id = user.clickupId;
+    if (user.clickupUserId) updateData.clickup_user_id = user.clickupUserId;
     if (user.username) updateData.username = user.username;
     if (user.email) updateData.email = user.email;
     if (user.profilePicture) updateData.profile_picture = user.profilePicture;
     if (user.accessToken) updateData.access_token = user.accessToken;
+    if (user.tokenType) updateData.token_type = user.tokenType;
+    if (user.expiresAt) updateData.expires_at = user.expiresAt;
+    if (user.scopesGranted) updateData.scopes_granted = user.scopesGranted;
+    if (user.teamId) updateData.team_id = user.teamId;
+    if (user.teamName) updateData.team_name = user.teamName;
+    if (user.authorizedWorkspaces) updateData.authorized_workspaces = user.authorizedWorkspaces;
     if (user.userData) updateData.user_data = user.userData;
-    
+
     updateData.updated_at = new Date().toISOString();
+    updateData.last_sync = new Date().toISOString();
 
     const { data, error } = await supabase
       .from("users")

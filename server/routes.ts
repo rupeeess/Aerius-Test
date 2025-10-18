@@ -79,23 +79,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const clickupUser = userResponse.data.user;
 
-      let user = await storage.getUserByClickupId(clickupUser.id.toString());
+      // Fetch user's teams/workspaces
+      const teamsResponse = await axios.get(
+        "https://api.clickup.com/api/v2/team",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      const teams = teamsResponse.data.teams || [];
+      const authorizedWorkspaces = teams.map((team: any) => ({
+        team_id: team.id,
+        team_name: team.name,
+        authorized_at: new Date().toISOString(),
+      }));
+
+      // Use first team as primary team
+      const primaryTeam = teams[0];
+
+      let user = await storage.getUserByClickupUserId(clickupUser.id.toString());
 
       if (user) {
         user = await storage.updateUser(user.id, {
+          clickupUserId: clickupUser.id.toString(),
           username: clickupUser.username,
           email: clickupUser.email,
           profilePicture: clickupUser.profilePicture,
           accessToken,
+          tokenType: "Bearer",
+          teamId: primaryTeam?.id,
+          teamName: primaryTeam?.name,
+          authorizedWorkspaces,
           userData: clickupUser,
         });
       } else {
         user = await storage.createUser({
-          clickupId: clickupUser.id.toString(),
+          clickupUserId: clickupUser.id.toString(),
           username: clickupUser.username,
           email: clickupUser.email,
           profilePicture: clickupUser.profilePicture,
           accessToken,
+          tokenType: "Bearer",
+          teamId: primaryTeam?.id,
+          teamName: primaryTeam?.name,
+          authorizedWorkspaces,
           userData: clickupUser,
         });
       }

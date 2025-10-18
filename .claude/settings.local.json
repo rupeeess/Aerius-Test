@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh repo create ClickUpConnect --private --source=. --remote=origin --push)",
+      "Bash(git config user.name)",
+      "Bash(git config user.email)",
+      "Bash(git remote add origin https://github.com/rupeeess/Aerius-Test.git)",
+      "Bash(git branch -M main)",
+      "Bash(git push -u origin main)",
+      "Read(//var/folders/49/vldznb4n75ddrbtkzvq8fqlr0000gn/T/TemporaryItems/NSIRD_screencaptureui_XrNMzy/**)",
+      "Read(//var/folders/49/vldznb4n75ddrbtkzvq8fqlr0000gn/T/TemporaryItems/NSIRD_screencaptureui_BWMSNx/**)",
+      "Bash(npm run build)",
+      "Bash(npm install)",
+      "Bash(git add package.json)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nFix build error by moving build dependencies to production dependencies\n\nMoved vite, esbuild, typescript, and related build tools from devDependencies\nto dependencies to ensure they are available during production builds on Render.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push)",
+      "Read(//var/folders/49/vldznb4n75ddrbtkzvq8fqlr0000gn/T/TemporaryItems/NSIRD_screencaptureui_e8NdrM/**)",
+      "Bash(git add vite.config.ts)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nFix vite config to conditionally load Replit plugins\n\nMoved Replit-specific plugins to conditional imports to prevent build\nerrors in non-Replit environments like Render. Plugins now only load\nwhen NODE_ENV is not production and REPL_ID is defined.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Read(//var/folders/49/vldznb4n75ddrbtkzvq8fqlr0000gn/T/TemporaryItems/NSIRD_screencaptureui_LzzcJu/**)",
+      "Read(//var/folders/49/vldznb4n75ddrbtkzvq8fqlr0000gn/T/TemporaryItems/NSIRD_screencaptureui_w7qX1J/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
