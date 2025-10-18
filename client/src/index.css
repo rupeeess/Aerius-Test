@@ -30,7 +30,7 @@
 
   --sidebar-foreground: 210 25% 7.8431%;
 
-  --sidebar-border: 205 25% 90.5882%;
+  --sidebar-border: 205.0000 25.0000% 90.5882%;
 
   --sidebar-primary: 203.8863 88.2845% 53.1373%;
 
@@ -76,9 +76,9 @@
   --chart-4: 147.1429 78.5047% 41.9608%;
   --chart-5: 341.4894 75.2000% 50.9804%;
 
-  --font-sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: Open Sans, sans-serif;
   --font-serif: Georgia, serif;
-  --font-mono: "JetBrains Mono", Menlo, monospace;
+  --font-mono: Menlo, monospace;
   --radius: 1.3rem;
   --shadow-2xs: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00);
   --shadow-xs: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0.00);
@@ -170,7 +170,7 @@
 
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 195 15.3846% 94.9020%;
+  --secondary: 195.0000 15.3846% 94.9020%;
 
   --secondary-foreground: 210 25% 7.8431%;
 
@@ -230,6 +230,12 @@
   /* Fallback for older browsers */
   --destructive-border: hsl(var(--destructive));
   --destructive-border: hsl(from hsl(var(--destructive)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --radius: 1.3rem;
+  --spacing: 0.25rem;
+  --font-mono: Menlo, monospace;
+  --font-sans: Open Sans, sans-serif;
+  --font-serif: Georgia, serif;
+  --tracking-normal: 0em;
 }
 
 @layer base {

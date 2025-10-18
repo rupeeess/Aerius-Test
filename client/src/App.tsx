@@ -10,7 +10,7 @@ import Callback from "@/pages/callback";
 import NotFound from "@/pages/not-found";
 import type { User } from "@shared/schema";
 
-function ProtectedRoute({ component: Component }: { component: () => JSX.Element }) {
+function ProtectedRoute({ component: Component }: { component: () => JSX.Element }): JSX.Element {
   const { data: user, isLoading } = useQuery<User>({
     queryKey: ["/api/user/profile"],
     retry: false,
@@ -31,7 +31,7 @@ function ProtectedRoute({ component: Component }: { component: () => JSX.Element
   return <Component />;
 }
 
-function PublicRoute({ component: Component }: { component: () => JSX.Element }) {
+function PublicRoute({ component: Component }: { component: () => JSX.Element }): JSX.Element {
   const { data: user, isLoading } = useQuery<User>({
     queryKey: ["/api/user/profile"],
     retry: false,
@@ -55,9 +55,13 @@ function PublicRoute({ component: Component }: { component: () => JSX.Element })
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={() => <PublicRoute component={Login} />} />
+      <Route path="/">
+        {() => <PublicRoute component={Login} />}
+      </Route>
       <Route path="/callback" component={Callback} />
-      <Route path="/profile" component={() => <ProtectedRoute component={Profile} />} />
+      <Route path="/profile">
+        {() => <ProtectedRoute component={Profile} />}
+      </Route>
       <Route component={NotFound} />
     </Switch>
   );
